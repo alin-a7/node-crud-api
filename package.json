@@ -1,0 +1,45 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/bundle.js",
+  "type": "module",
+  "scripts": {
+    "start:dev": "cross-env NODE_ENV=development nodemon --exec tsx src/index.ts",
+    "start:prod": "cross-env NODE_ENV=production webpack && node dist/bundle.js",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.0.2",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.2.2",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alin-a7/node-crud-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alin-a7/node-crud-api/issues"
+  },
+  "homepage": "https://github.com/alin-a7/node-crud-api#readme"
+}
