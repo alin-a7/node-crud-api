@@ -1,13 +1,29 @@
-import { createServer } from 'node:http'
 import 'dotenv/config'
 
-const port = process.env.PORT || 3000
+import Application from '@/framework/Application'
+import { jsonMiddleware, urlMiddleware } from '@/framework/middleware'
 
-const server = createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' })
-  res.end(JSON.stringify({ message: 'Hello from Node.js + TypeScript!' }))
-})
+import { userRouter } from './users'
 
-server.listen(port, () => {
-  console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on http://localhost:${port}`)
-})
+const NODE_ENV = process.env.NODE_ENV || 'development'
+const PORT = Number(process.env.PORT) || 3000
+const BASE_URL = process.env.BASE_URL || 'http://localhost'
+
+const app = new Application()
+
+app.use(jsonMiddleware)
+app.use(urlMiddleware(`${BASE_URL}:${PORT}`))
+
+app.addRouter(userRouter)
+
+const start = async () => {
+  try {
+    app.listen(PORT, () =>
+      console.log(`🚀 Server running in ${NODE_ENV} mode on ${BASE_URL}:${PORT}`),
+    )
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+start()
