@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http'
 
-export type RequestHandler = (req: IncomingMessage, res: ServerResponse) => void
+export type RequestHandler = (req: RequestWithBody, res: ServerResponse) => void
 
 export enum HttpMethod {
   GET = 'GET',
@@ -13,11 +13,22 @@ export enum HttpMethod {
 }
 
 export interface Endpoint {
-  [method: string]: (req: IncomingMessage, res: ServerResponse) => void
+  [method: string]: RequestHandler
 }
 
 export interface RequestWithBody extends IncomingMessage {
   body?: any
   pathname?: string
   params?: Record<string, string>
+  routeParams?: Record<string, string>
+}
+
+export interface APIError {
+  code: string
+  message: string
+}
+
+export enum ERROR_CODE {
+  BAD_REQUEST = 'BAD_REQUEST',
+  NOT_FOUND = 'NOT_FOUND',
 }

@@ -1,18 +1,16 @@
 import http, { ServerResponse, Server } from 'http'
-import EventEmitter from 'events'
 
-import { RequestWithBody } from './types'
+import { ERROR_CODE, RequestWithBody } from './types'
 import Router from './Router'
 
 type Middleware = (req: RequestWithBody, res: ServerResponse) => void
 
 export default class Application {
-  private emitter: EventEmitter
   private server: Server
   private middlewares: Middleware[]
+  private routers: Router[] = []
 
   constructor() {
-    this.emitter = new EventEmitter()
     this.server = this.createServer()
     this.middlewares = []
   }
@@ -26,46 +24,45 @@ export default class Application {
   }
 
   addRouter(router: Router) {
-    const endpoints = router.getEndpoints()
-
-    Object.keys(endpoints).forEach((path) => {
-      const endpoint = endpoints[path]
-      
-      Object.keys(endpoint).forEach((method) => {
-        this.emitter.on(
-          this.getRouteMask(path, method),
-          (req: RequestWithBody, res: ServerResponse) => {
-            const handler = endpoint[method]
-            handler(req, res)
-          },
-        )
-      })
-    })
+    this.routers.push(router)
   }
 
   private createServer(): Server {
-    return http.createServer((req: RequestWithBody, res: ServerResponse) => {
+    return http.createServer(async (req: RequestWithBody, res: ServerResponse) => {
       let body = ''
 
       req.on('data', (chunk: Buffer) => {
         body += chunk.toString()
       })
 
-      req.on('end', () => {
+      req.on('end', async () => {
         try {
-          this.applyMiddlewares(req, res, () => {
-            const emitted = this.emitter.emit(
-              this.getRouteMask(req.pathname || '', req.method || ''),
-              req,
-              res,
-            )
+          if (body) {
+            req.body = JSON.parse(body)
+          }
 
-            if (!emitted) {
-              res.statusCode = 404
-              res.end('Not Found')
+          this.applyMiddlewares(req, res)
+
+          let matched = false
+
+          for (const router of this.routers) {
+            const result = router.match(req.method || '', req.pathname || '')
+
+            if (result) {
+              req.routeParams = result.params
+              await Promise.resolve(result.handler(req, res))
+              matched = true
+              break
             }
-          })
+          }
+
+          if (!matched) {
+            console.log('404 NOT FOUND:', req.pathname || '')
+            res.statusCode = 404
+            res.sendError({ code: ERROR_CODE.NOT_FOUND, message: 'Endpoint not found' })
+          }
         } catch (error) {
+          console.error('500 ERROR: ', error)
           res.statusCode = 500
           res.end('Internal Server Error')
         }
@@ -73,12 +70,7 @@ export default class Application {
     })
   }
 
-  private applyMiddlewares(req: RequestWithBody, res: ServerResponse, callback: () => void) {
+  private applyMiddlewares(req: RequestWithBody, res: ServerResponse) {
     this.middlewares.forEach((middleware) => middleware(req, res))
-    callback()
-  }
-
-  private getRouteMask(path: string, method: string): string {
-    return `[${path}]:[${method}]`
   }
 }

@@ -8,6 +8,7 @@ export function urlMiddleware(baseUrl: string) {
 
     const parsedUrl = new URL(req.url, baseUrl)
     const params: Record<string, string> = {}
+    
     parsedUrl.searchParams.forEach((value, key) => (params[key] = value))
 
     req.pathname = parsedUrl.pathname
