@@ -1,7 +1,10 @@
 import Router from '@/framework/Router'
+import * as UserController from './user-controller'
 
 export const userRouter = new Router()
 
-userRouter.get('/users', (req, res) => {
-  res.end('<h1>Hello world!</h1><h2>This is a test</h2><h3>/users</h3>')
-})
+userRouter.get('/users', UserController.getAllUsers)
+userRouter.get('/users/:id', UserController.getUser)
+userRouter.post('/users', UserController.createUser)
+userRouter.put('/users/:id', UserController.updateUser)
+userRouter.delete('/users/:id', UserController.deleteUser)
