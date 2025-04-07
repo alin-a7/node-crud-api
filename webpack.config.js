@@ -17,6 +17,9 @@ export default {
     ],
   },
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
     extensions: ['.ts', '.js'],
   },
   output: {
@@ -28,8 +31,5 @@ export default {
   },
   experiments: {
     outputModule: true,
-  },
-  externals: {
-    // Добавьте здесь любые модули, которые не нужно включать в сборку
   },
 }
