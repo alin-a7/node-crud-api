@@ -1,4 +1,5 @@
 import Router from '@/framework/Router'
+
 import * as UserController from './user-controller'
 
 export const userRouter = new Router()

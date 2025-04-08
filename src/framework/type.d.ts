@@ -1,4 +1,5 @@
 import { ServerResponse } from 'http'
+
 import { APIError } from './types'
 
 declare module 'http' {

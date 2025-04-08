@@ -6,6 +6,7 @@ import Application from '@/framework/Application'
 import { jsonMiddleware, urlMiddleware } from '@/framework/middleware'
 
 import { ERROR_MESSAGES } from '@/constants'
+
 import { userRouter } from '@/users'
 
 let app: Application

@@ -1,4 +1,4 @@
-import { Endpoint, HttpMethod, RequestHandler } from './types'
+import { HttpMethod, RequestHandler } from './types'
 
 type Route = {
   method: HttpMethod

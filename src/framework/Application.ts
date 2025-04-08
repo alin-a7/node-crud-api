@@ -1,9 +1,9 @@
 import http, { Server, ServerResponse } from 'http'
 
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants'
+
 import Router from './Router'
 import { RequestWithBody } from './types'
-
-import { ERROR_CODES, ERROR_MESSAGES } from '@/constants'
 
 type Middleware = (req: RequestWithBody, res: ServerResponse) => void
 

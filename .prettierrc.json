@@ -5,5 +5,15 @@
   "singleQuote": true,
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
+  "importOrder": [
+    "^(http|fs|path)(/.*)?$",
+    "^(supertest|uuid|dotenv)",
+    "^@/framework/(.*)$",
+    "^@/constants(/.*)?$",
+    "^@/users/(.*)$",
+    "^[./]",
+    ".*"
+  ],
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "printWidth": 100
 }
