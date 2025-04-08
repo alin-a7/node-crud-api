@@ -1,7 +1,9 @@
-import http, { ServerResponse, Server } from 'http'
+import http, { Server, ServerResponse } from 'http'
 
-import { ERROR_CODE, RequestWithBody } from './types'
 import Router from './Router'
+import { RequestWithBody } from './types'
+
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants'
 
 type Middleware = (req: RequestWithBody, res: ServerResponse) => void
 
@@ -25,6 +27,10 @@ export default class Application {
 
   addRouter(router: Router) {
     this.routers.push(router)
+  }
+
+  getServer() {
+    return this.server
   }
 
   private createServer(): Server {
@@ -59,12 +65,12 @@ export default class Application {
           if (!matched) {
             console.log('404 NOT FOUND:', req.pathname || '')
             res.statusCode = 404
-            res.sendError({ code: ERROR_CODE.NOT_FOUND, message: 'Endpoint not found' })
+            res.sendError({ code: ERROR_CODES.notFound, message: ERROR_MESSAGES.endpointNotFound })
           }
         } catch (error) {
           console.error('500 ERROR: ', error)
           res.statusCode = 500
-          res.end('Internal Server Error')
+          res.end(ERROR_MESSAGES.serverError)
         }
       })
     })

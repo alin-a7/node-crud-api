@@ -27,8 +27,3 @@ export interface APIError {
   code: string
   message: string
 }
-
-export enum ERROR_CODE {
-  BAD_REQUEST = 'BAD_REQUEST',
-  NOT_FOUND = 'NOT_FOUND',
-}

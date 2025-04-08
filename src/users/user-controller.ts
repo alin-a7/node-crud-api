@@ -1,9 +1,11 @@
 import { ServerResponse } from 'http'
 
-import { ERROR_CODE, RequestWithBody } from '@/framework/types'
+import { RequestWithBody } from '@/framework/types'
 
-import * as UserModel from './user-model'
+import { ERROR_CODES, ERROR_MESSAGES } from '@/constants'
+
 import { UserOmitId } from './types'
+import * as UserModel from './user-model'
 import { validateUserId } from './validation'
 
 export const getAllUsers = async (_req: RequestWithBody, res: ServerResponse) => {
@@ -18,7 +20,7 @@ export const getUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (userIdError) {
     res.statusCode = 400
-    res.sendError({ code: ERROR_CODE.BAD_REQUEST, message: userIdError })
+    res.sendError({ code: ERROR_CODES.badRequest, message: userIdError })
     return
   }
 
@@ -26,7 +28,7 @@ export const getUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (!user) {
     res.statusCode = 404
-    res.sendError({ code: ERROR_CODE.NOT_FOUND, message: 'User not found' })
+    res.sendError({ code: ERROR_CODES.notFound, message: ERROR_MESSAGES.userNotFound })
     return
   }
 
@@ -45,13 +47,13 @@ export const createUser = async (req: RequestWithBody, res: ServerResponse) => {
 
     if (!bodyValue) {
       res.statusCode = 400
-      res.sendError({ code: ERROR_CODE.BAD_REQUEST, message: `${field} is required` })
+      res.sendError({ code: ERROR_CODES.badRequest, message: ERROR_MESSAGES.fieldRequired(field) })
       return
     }
 
     if (isArray && !Array.isArray(bodyValue)) {
       res.statusCode = 400
-      res.sendError({ code: ERROR_CODE.BAD_REQUEST, message: `${field} must be an array` })
+      res.sendError({ code: ERROR_CODES.badRequest, message: ERROR_MESSAGES.fieldIsArray(field) })
       return
     }
   }
@@ -68,7 +70,7 @@ export const updateUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (userIdError) {
     res.statusCode = 400
-    res.sendError({ code: ERROR_CODE.BAD_REQUEST, message: userIdError })
+    res.sendError({ code: ERROR_CODES.badRequest, message: userIdError })
     return
   }
 
@@ -76,7 +78,7 @@ export const updateUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (hobbies && !Array.isArray(hobbies)) {
     res.statusCode = 400
-    res.sendError({ code: ERROR_CODE.BAD_REQUEST, message: 'Hobbies must be an array' })
+    res.sendError({ code: ERROR_CODES.badRequest, message: ERROR_MESSAGES.fieldIsArray('hobbies') })
     return
   }
 
@@ -84,7 +86,7 @@ export const updateUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (!user) {
     res.statusCode = 404
-    res.sendError({ code: ERROR_CODE.NOT_FOUND, message: 'User not found' })
+    res.sendError({ code: ERROR_CODES.notFound, message: ERROR_MESSAGES.userNotFound })
     return
   }
 
@@ -97,7 +99,7 @@ export const deleteUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (userIdError) {
     res.statusCode = 400
-    res.sendError({ code: ERROR_CODE.BAD_REQUEST, message: userIdError })
+    res.sendError({ code: ERROR_CODES.badRequest, message: userIdError })
     return
   }
 
@@ -105,7 +107,7 @@ export const deleteUser = async (req: RequestWithBody, res: ServerResponse) => {
 
   if (!hasUser) {
     res.statusCode = 404
-    res.sendError({ code: ERROR_CODE.NOT_FOUND, message: 'User not found' })
+    res.sendError({ code: ERROR_CODES.notFound, message: ERROR_MESSAGES.userNotFound })
     return
   }
 
