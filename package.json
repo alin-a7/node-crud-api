@@ -7,6 +7,7 @@
   "scripts": {
     "start:dev": "cross-env NODE_ENV=development nodemon --exec tsx src/index.ts",
     "start:prod": "cross-env NODE_ENV=production npm run lint && webpack && node dist/bundle.js",
+    "start:multi": "cross-env NODE_ENV=development nodemon --exec tsx src/cluster.ts",
     "lint": "eslint . --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "test": "jest"
