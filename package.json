@@ -8,8 +8,14 @@
     "start:dev": "cross-env NODE_ENV=development nodemon --exec tsx src/index.ts",
     "start:prod": "cross-env NODE_ENV=production npm run lint && webpack && node dist/bundle.js",
     "lint": "eslint . --fix",
+    "build": "webpack",
     "format": "prettier --write \"src/**/*.ts\"",
-    "test": "jest"
+    "test": "jest",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:scan": "snyk test --docker node-crud-api-app:latest --file=Dockerfile",
+    "docker:push": "docker-compose push"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
