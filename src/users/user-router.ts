@@ -4,8 +4,8 @@ import * as UserController from './user-controller'
 
 export const userRouter = new Router()
 
-userRouter.get('/users', UserController.getAllUsers)
-userRouter.get('/users/:id', UserController.getUser)
-userRouter.post('/users', UserController.createUser)
-userRouter.put('/users/:id', UserController.updateUser)
-userRouter.delete('/users/:id', UserController.deleteUser)
+userRouter.get('/api/users', UserController.getAllUsers)
+userRouter.get('/api/users/:id', UserController.getUser)
+userRouter.post('/api/users', UserController.createUser)
+userRouter.put('/api/users/:id', UserController.updateUser)
+userRouter.delete('/api/users/:id', UserController.deleteUser)

@@ -13,7 +13,6 @@ export default defineConfig({
   },
   plugins: {
     '@typescript-eslint': tsPlugin,
-    prettier: eslintPluginPrettier,
   },
   rules: {
     ...tsPlugin.configs.recommended.rules,

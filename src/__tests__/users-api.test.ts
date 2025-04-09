@@ -28,15 +28,15 @@ beforeAll(() => {
 })
 
 describe('Users API', () => {
-  describe('GET /users', () => {
+  describe('GET /api/users', () => {
     it('should return empty array initially', async () => {
-      const res = await request(server).get('/users')
+      const res = await request(server).get('/api/users')
       expect(res.status).toBe(200)
       expect(res.body).toEqual([])
     })
   })
 
-  describe('POST /users', () => {
+  describe('POST /api/users', () => {
     it('should create new user and return it', async () => {
       const res = await createUser()
 
@@ -68,34 +68,34 @@ describe('Users API', () => {
       ]
 
       for (const { body, message } of testCases) {
-        const res = await request(server).post('/users').send(body)
+        const res = await request(server).post('/api/users').send(body)
         expect(res.status).toBe(400)
         expect(res.body.message).toBe(message)
       }
     })
   })
 
-  describe('GET /users/:id', () => {
+  describe('GET /api/users/:id', () => {
     it('should return created user', async () => {
-      const res = await request(server).get(`/users/${userId}`)
+      const res = await request(server).get(`/api/users/${userId}`)
       expect(res.status).toBe(200)
       expect(res.body.id).toBe(userId)
     })
 
     it('should return 400 for invalid user id (not uuid)', async () => {
-      const res = await request(server).get(`/users/some-invalid-id`)
+      const res = await request(server).get(`/api/users/some-invalid-id`)
       expect(res.status).toBe(400)
       expect(res.body.message).toBe(ERROR_MESSAGES.invalidUserId)
     })
 
     it('should return 404 for non-existent user', async () => {
-      const res = await request(server).get(`/users/${getNoneExistingUserId(userId)}`)
+      const res = await request(server).get(`/api/users/${getNoneExistingUserId(userId)}`)
       expect(res.status).toBe(404)
       expect(res.body.message).toBe(ERROR_MESSAGES.userNotFound)
     })
   })
 
-  describe('PUT /users/:id', () => {
+  describe('PUT /api/users/:id', () => {
     it('should update user data', async () => {
       const updated = {
         username: 'Updated User',
@@ -103,27 +103,29 @@ describe('Users API', () => {
         hobbies: ['gaming'],
       }
 
-      const res = await request(server).put(`/users/${userId}`).send(updated)
+      const res = await request(server).put(`/api/users/${userId}`).send(updated)
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({ ...updated, id: userId })
     })
 
     it('should validate hobbies is an array', async () => {
-      const res = await request(server).put(`/users/${userId}`).send({ hobbies: 'not-an-array' })
+      const res = await request(server)
+        .put(`/api/users/${userId}`)
+        .send({ hobbies: 'not-an-array' })
 
       expect(res.status).toBe(400)
       expect(res.body.message).toBe(ERROR_MESSAGES.fieldIsArray('hobbies'))
     })
   })
 
-  describe('DELETE /users/:id', () => {
+  describe('DELETE /api/users/:id', () => {
     it('should delete user', async () => {
-      const res = await request(server).delete(`/users/${userId}`)
+      const res = await request(server).delete(`/api/users/${userId}`)
       expect(res.status).toBe(204)
     })
 
     it('should return 404 for deleted user', async () => {
-      const res = await request(server).get(`/users/${userId}`)
+      const res = await request(server).get(`/api/users/${userId}`)
       expect(res.status).toBe(404)
       expect(res.body.message).toBe(ERROR_MESSAGES.userNotFound)
     })
@@ -141,7 +143,7 @@ describe('Users API', () => {
 // Helpers to create user
 const createUser = async () =>
   request(server)
-    .post('/users')
+    .post('/api/users')
     .send({
       username: 'Test User',
       age: 30,
