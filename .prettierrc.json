@@ -7,7 +7,7 @@
   "importOrderSortSpecifiers": true,
   "importOrder": [
     "^(http|fs|path|reflect-metadata)(/.*)?$",
-    "^(supertest|uuid|dotenv|typeorm)",
+    "^(crypto|supertest|uuid|dotenv|typeorm)",
     "^@/framework/(.*)$",
     "^@/constants(/.*)?$",
     "^@/users/(.*)$",
