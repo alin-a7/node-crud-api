@@ -1,5 +1,6 @@
 import { createServer } from 'http'
 
+import { randomUUID } from 'crypto'
 import request from 'supertest'
 
 import Application from '@/framework/Application'
@@ -7,6 +8,7 @@ import { jsonMiddleware, urlMiddleware } from '@/framework/middleware'
 
 import { ERROR_MESSAGES } from '@/constants'
 
+import { AppDataSource } from '@/typeorm.config'
 import { userRouter } from '@/users'
 
 let app: Application
@@ -16,15 +18,22 @@ let userId: string
 const PORT = Number(process.env.PORT) || 3000
 const BASE_URL = process.env.BASE_URL || 'http://localhost'
 
-beforeAll(() => {
+beforeAll(async () => {
   app = new Application()
   app.use(jsonMiddleware)
   app.use(urlMiddleware(`${BASE_URL}:${PORT}`))
+
   app.addRouter(userRouter)
+
+  await AppDataSource.initialize()
 
   server = createServer((req, res) => {
     app.getServer().emit('request', req, res)
   })
+})
+
+afterAll(async () => {
+  await AppDataSource.destroy()
 })
 
 describe('Users API', () => {
@@ -89,7 +98,7 @@ describe('Users API', () => {
     })
 
     it('should return 404 for non-existent user', async () => {
-      const res = await request(server).get(`/api/users/${getNoneExistingUserId(userId)}`)
+      const res = await request(server).get(`/api/users/${randomUUID()}`)
       expect(res.status).toBe(404)
       expect(res.body.message).toBe(ERROR_MESSAGES.userNotFound)
     })
@@ -149,5 +158,3 @@ const createUser = async () =>
       age: 30,
       hobbies: ['reading', 'coding'],
     })
-
-const getNoneExistingUserId = (userId: string) => `a${userId.slice(1)}`
