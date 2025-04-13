@@ -1,11 +1,6 @@
-import dotenv from 'dotenv'
 import { DataSource, DataSourceOptions } from 'typeorm'
 
 import { User } from './users/model/UserEntity'
-
-dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
-})
 
 const isTestEnv = process.env.NODE_ENV === 'test'
 

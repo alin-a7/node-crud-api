@@ -21,7 +21,6 @@ app.addRouter(userRouter)
 
 const start = async () => {
   AppDataSource.initialize()
-
     .then(() => {
       console.log('📦 Connected to PostgreSQL')
       try {

@@ -13,7 +13,7 @@ let currentIndex = 0
 
 if (cluster.isPrimary) {
   console.log(`Master ${process.pid} is running`)
-  
+
   // Running workers on different ports
   for (let i = 1; i < numCPUs; i++) {
     const port = BASE_PORT + i
@@ -44,6 +44,6 @@ if (cluster.isPrimary) {
     req.pipe(proxyReq, { end: true })
   })
   server.listen(BASE_PORT, () => {
-    console.log(`Load balancer listening on port ${BASE_PORT}`)
+    console.log(`🚀 Load balancer listening on port ${BASE_PORT}`)
   })
 }
