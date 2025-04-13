@@ -15,5 +15,6 @@
     ".*"
   ],
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "printWidth": 100
+  "printWidth": 100,
+  "parser": "babel-ts"
 }
