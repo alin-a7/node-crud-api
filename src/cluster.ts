@@ -6,6 +6,7 @@ import http from 'node:http'
 import os from 'node:os'
 
 const BASE_PORT = Number(process.env.PORT)
+const HOSTNAME = process.env.BASE_URL?.split('://')[1] || 'localhost'
 const numCPUs = os.availableParallelism()
 const workerPorts: number[] = []
 
@@ -30,7 +31,7 @@ if (cluster.isPrimary) {
 
     const proxyReq = http.request(
       {
-        hostname: 'localhost',
+        hostname: HOSTNAME,
         port: targetPort,
         path: req.url,
         method: req.method,
