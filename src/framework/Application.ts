@@ -35,6 +35,8 @@ export default class Application {
 
   private createServer(): Server {
     return http.createServer(async (req: RequestWithBody, res: ServerResponse) => {
+      console.log(`📥 [${process.pid}] ${req.method} ${req.url}`)
+
       let body = ''
 
       req.on('data', (chunk: Buffer) => {

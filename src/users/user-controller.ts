@@ -4,12 +4,12 @@ import { RequestWithBody } from '@/framework/types'
 
 import { ERROR_CODES, ERROR_MESSAGES } from '@/constants'
 
-import { UserOmitId } from './types'
-import * as UserModel from './user-model'
+import * as UserModel from './model/userRepository'
+import { UserDTOOmitId } from './types'
 import { validateUserId } from './validation'
 
 export const getAllUsers = async (_req: RequestWithBody, res: ServerResponse) => {
-  const users = UserModel.getAllUsers()
+  const users = await UserModel.getAllUsers()
 
   res.send(users)
 }
@@ -24,7 +24,7 @@ export const getUser = async (req: RequestWithBody, res: ServerResponse) => {
     return
   }
 
-  const user = UserModel.getUser(String(userId))
+  const user = await UserModel.getUser(String(userId))
 
   if (!user) {
     res.statusCode = 404
@@ -40,7 +40,7 @@ export const createUser = async (req: RequestWithBody, res: ServerResponse) => {
     { field: 'username' },
     { field: 'age' },
     { field: 'hobbies', isArray: true },
-  ] as { field: keyof UserOmitId; isArray?: boolean }[]
+  ] as { field: keyof UserDTOOmitId; isArray?: boolean }[]
 
   for (const { field, isArray } of userRequiredFields) {
     const bodyValue = req?.body[field]
@@ -58,7 +58,7 @@ export const createUser = async (req: RequestWithBody, res: ServerResponse) => {
     }
   }
 
-  const user = UserModel.createUser(req.body)
+  const user = await UserModel.createUser(req.body)
 
   res.statusCode = 201
   res.send(user)
@@ -82,7 +82,7 @@ export const updateUser = async (req: RequestWithBody, res: ServerResponse) => {
     return
   }
 
-  const user = UserModel.updateUser(String(userId), req.body)
+  const user = await UserModel.updateUser(String(userId), req.body)
 
   if (!user) {
     res.statusCode = 404
@@ -103,7 +103,7 @@ export const deleteUser = async (req: RequestWithBody, res: ServerResponse) => {
     return
   }
 
-  const hasUser = UserModel.deleteUser(String(userId))
+  const hasUser = await UserModel.deleteUser(String(userId))
 
   if (!hasUser) {
     res.statusCode = 404
