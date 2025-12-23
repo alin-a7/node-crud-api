@@ -5,14 +5,25 @@
   "main": "dist/bundle.js",
   "type": "module",
   "scripts": {
-    "start:dev": "cross-env NODE_ENV=development nodemon --exec tsx src/index.ts",
-    "start:prod": "cross-env NODE_ENV=production npm run lint && webpack && node dist/bundle.js",
+    "start:dev": "dotenv -e .env.local -- cross-env NODE_ENV=development nodemon --exec tsx src/index.ts",
+    "start:prod": "dotenv -e .env.local -- cross-env NODE_ENV=production webpack && node dist/bundle.js",
+    "start:multi": "dotenv -e .env.local -- cross-env NODE_ENV=development nodemon --exec tsx src/cluster.ts",
     "lint": "eslint . --fix",
+    "build": "webpack",
     "format": "prettier --write \"src/**/*.ts\"",
-    "test": "jest"
+    "test": "dotenv -e .env.test -- cross-env NODE_ENV=test jest",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:scan": "snyk test --docker node-crud-api-app:latest --file=Dockerfile --exclude-base-image-vulns",
+    "docker:push": "docker-compose push"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
+    "pg": "^8.14.1",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7",
+    "typeorm": "^0.3.22",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
@@ -23,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-define-config": "^2.1.0",

@@ -6,8 +6,8 @@
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
   "importOrder": [
-    "^(http|fs|path)(/.*)?$",
-    "^(supertest|uuid|dotenv)",
+    "^(http|fs|path|reflect-metadata)(/.*)?$",
+    "^(crypto|supertest|uuid|dotenv|typeorm)",
     "^@/framework/(.*)$",
     "^@/constants(/.*)?$",
     "^@/users/(.*)$",
@@ -15,5 +15,6 @@
     ".*"
   ],
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "printWidth": 100
+  "printWidth": 100,
+  "parser": "babel-ts"
 }
